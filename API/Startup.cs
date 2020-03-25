@@ -32,6 +32,17 @@ namespace API
                 //opt.UseSqlite(Configuration.GetConnectionString("DefaultConnectionString"));
                 opt.UseSqlite("Data Source=reactivites.db");
             });
+            services.AddCors(opt => 
+            {
+                opt.AddPolicy("CorsPolicy", policy =>
+                {   
+                    //allow any endpoint came from localhost:3000
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000"); 
+                });
+            });
+
+            services.AddMvc(options => options.EnableEndpointRouting = false);
+
             services.AddControllers();
         }
 
@@ -44,6 +55,8 @@ namespace API
             }
 
             //app.UseHttpsRedirection();
+            
+            app.UseCors("CorsPolicy");
 
             app.UseRouting();
 
