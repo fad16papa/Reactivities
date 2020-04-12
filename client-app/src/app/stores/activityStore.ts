@@ -9,10 +9,8 @@ configure({enforceActions: 'always'});
 export class ActivityStore{
     //make sure to include the "experimentalDecorators": true inside of our tsconfig.json
     @observable activityRegistry = new Map();
-    @observable activities: IActivity[] = [];
     @observable loadingInitial = false;
-    @observable selectedActivity: IActivity | undefined;
-    @observable editMode = false;
+    @observable activity: IActivity | null = null;
     @observable submitting = false;
     @observable target = '';
 
@@ -41,6 +39,37 @@ export class ActivityStore{
         }
     };
 
+    //This is for the loading the specific activity from List activityPage by its ID
+    @action loadActivity = async (id:string) => {
+        let activity = this.getActivity(id);
+        if(activity) {
+            this.activity = activity;
+        } else {
+            this.loadingInitial = true;
+            try {
+                activity = await agent.Activities.details(id);
+                runInAction('getting activity',() => {
+                    this.activity = activity;
+                    this.loadingInitial = false;
+                })
+            } catch (error) {
+                runInAction('getting activity error',() => {
+                    this.loadingInitial = false;
+                })
+                console.log(error);
+            }
+        }
+    }
+
+    @action clearActvity = () => {
+        this.activity = null;
+    }
+
+    //This is a helper method to 
+    getActivity = (id:string) => {
+        return this.activityRegistry.get(id);
+    }
+
     //This will create an activity 
     //Note: use the mobx strict mode if our action is using a async method 
     @action createActivity = async (activity: IActivity) => {
@@ -49,7 +78,6 @@ export class ActivityStore{
             await agent.Activities.create(activity);
             runInAction('Creating Activity',() => {
                 this.activityRegistry.set(activity.id, activity);
-                this.editMode = false;
                 this.submitting = false;
             })         
         } catch (error) {
@@ -68,8 +96,7 @@ export class ActivityStore{
             await agent.Activities.update(activity);
             runInAction('Editing Activity',() => {
                 this.activityRegistry.set(activity.id, activity);
-                this.selectedActivity = activity;
-                this.editMode = false;
+                this.activity = activity;
                 this.submitting = false;
             })          
         } catch (error) {
@@ -99,33 +126,6 @@ export class ActivityStore{
             })
             console.log(error);
         }
-    }
-
-    //This will call the create activityFrom 
-    @action openCreateForm = () => {
-        this.editMode = true;
-        this.selectedActivity = undefined;
-    }
-    
-    //This will call the edit activityFrom 
-    @action openEditForm  = (id: string) => {
-        this.selectedActivity = this.activityRegistry.get(id);
-        this.editMode = true;
-    }
-
-    //This will cancel the load of edit activity 
-    @action cancelSelectedActivity = () => {
-        this.selectedActivity = undefined;
-    }
-
-    //This will close the activity Form 
-    @action cancelFormOpen = () => {
-        this.editMode = false;
-    }
-
-    @action selectActivity = (id: string) => {
-        this.selectedActivity = this.activityRegistry.get(id);
-        this.editMode = false;
     }
 }
 
