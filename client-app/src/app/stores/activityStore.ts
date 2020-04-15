@@ -15,7 +15,18 @@ export class ActivityStore{
     @observable target = '';
 
     @computed get activitiesByDate() {
-        return Array.from(this.activityRegistry.values()).sort((a, b) => Date.parse(a.date) - Date.parse(b.date))
+        return this.groupActivitiesByDate(Array.from(this.activityRegistry.values()));
+    }
+
+    groupActivitiesByDate(activities: IActivity[]) {
+        const sortedActivities = activities.sort(
+            (a,b) => Date.parse(a.date) - Date.parse(b.date)
+        )
+        return Object.entries(sortedActivities.reduce((activities, activity) => {
+            const date = activity.date.split('T')[0];
+            activities[date] = activities[date] ? [...activities[date], activity] : [activity];
+            return activities;
+        }, {} as {[key: string]: IActivity[]}));
     }
 
     //This will load the activity by its ID 
@@ -31,12 +42,13 @@ export class ActivityStore{
                   });
                   this.loadingInitial = false;
             })          
+            console.log(this.groupActivitiesByDate(activities));
         } catch (error) {
             runInAction('loading activities error',() => {             
                 this.loadingInitial = false;
             })       
             console.log(error);
-        }
+        }      
     };
 
     //This is for the loading the specific activity from List activityPage by its ID
