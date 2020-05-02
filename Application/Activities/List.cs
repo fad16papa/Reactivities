@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,11 +22,10 @@ namespace Application.Activities
 
             public async Task<List<Activity>> Handle(Query request, CancellationToken cancellationToken)
             {
-                var activities = await _context.Activities.ToListAsync(cancellationToken);
+                var activities = await _context.Activities.ToListAsync();
 
                 return activities;
             }
         }
-
     }
 }

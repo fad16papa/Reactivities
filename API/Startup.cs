@@ -1,20 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using API.Middleware;
+﻿using API.Middleware;
 using Application.Activities;
+using Domain;
 using FluentValidation.AspNetCore;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Persistence;
 
 namespace API
@@ -31,52 +27,52 @@ namespace API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(opt => 
+            services.AddDbContext<DataContext>(opt =>
             {
-                //opt.UseSqlite(Configuration.GetConnectionString("DefaultConnectionString"));
-                opt.UseSqlite("Data Source=reactivites.db");
+                opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
             });
-            services.AddCors(opt => 
+            services.AddCors(opt =>
             {
                 opt.AddPolicy("CorsPolicy", policy =>
-                {   
-                    //allow any endpoint came from localhost:3000
-                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000"); 
+                {
+                    policy.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:3000");
                 });
             });
+            services.AddMediatR(typeof(List.Handler).Assembly);
+            services.AddMvc()
+                .AddFluentValidation(cfg => cfg.RegisterValidatorsFromAssemblyContaining<Create>())
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+
+            var builder = services.AddIdentityCore<AppUser>();
+            var identityBuilder = new IdentityBuilder(builder.UserType, builder.Services);
+            identityBuilder.AddEntityFrameworkStores<DataContext>();
+            identityBuilder.AddSignInManager<SignInManager<AppUser>>();
+
+            services.AddAuthentication();
 
             services.AddMvc(options => options.EnableEndpointRouting = false);
 
-            services.AddMediatR(typeof(List.Handler).Assembly);
-
-            services.AddControllers().AddFluentValidation(config => {
-                config.RegisterValidatorsFromAssemblyContaining<Create>();
-                config.RegisterValidatorsFromAssemblyContaining<Edit>();
-            });
-
+            services.AddControllers(options => options.EnableEndpointRouting = false);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseMiddleware<ErrorHandlingMiddleware>();
+            
             if (env.IsDevelopment())
             {
-                //app.UseDeveloperExceptionPage();
+                // app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                // app.UseHsts();
             }
 
-            //app.UseHttpsRedirection();
-
+            // app.UseHttpsRedirection();
             app.UseCors("CorsPolicy");
-
-            app.UseRouting();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseMvc();
         }
     }
 }

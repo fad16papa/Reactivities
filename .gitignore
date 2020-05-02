@@ -1,6 +1,5 @@
 bin
 obj
-.vscode
+node_modules
 .DS_Store
-appsettings.json
 *.db

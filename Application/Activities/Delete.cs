@@ -27,25 +27,16 @@ namespace Application.Activities
             {
                 var activity = await _context.Activities.FindAsync(request.Id);
 
-                if(activity == null)
-                {
-                    throw new RestException(HttpStatusCode.NotFound, new { activity = "Not Found" });
-                }
-                else
-                {
-                    _context.Remove(activity);
+                if (activity == null)
+                    throw new RestException(HttpStatusCode.NotFound, new {Activity = "Not found"});
 
-                    var success = await _context.SaveChangesAsync() > 0;
+                _context.Remove(activity);              
 
-                    if(success)
-                    {
-                        return Unit.Value;
-                    }
-                    else
-                    {
-                        throw new Exception("Problem saving changes");
-                    }
-                }
+                var success = await _context.SaveChangesAsync() > 0;
+
+                if (success) return Unit.Value;
+
+                throw new Exception("Problem saving changes");
             }
         }
     }

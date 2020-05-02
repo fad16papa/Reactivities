@@ -47,30 +47,21 @@ namespace Application.Activities
             {
                 var activity = await _context.Activities.FindAsync(request.Id);
 
-                if(activity == null)
-                {
-                    throw new RestException(HttpStatusCode.NotFound, new { activity = "Not Found" });
-                }
-                else
-                {
-                    activity.Title = request.Title ?? activity.Title;
-                    activity.Description = request.Description ?? activity.Description;
-                    activity.Category = request.Category ?? activity.Category;
-                    activity.Date = request.Date ?? activity.Date;
-                    activity.City = request.City ?? activity.City;
-                    activity.Venue = request.Venue ?? activity.Venue;
+                if (activity == null)
+                    throw new RestException(HttpStatusCode.NotFound, new { Activity = "Not found" });
 
-                    var success = await _context.SaveChangesAsync() > 0;
+                activity.Title = request.Title ?? activity.Title;
+                activity.Description = request.Description ?? activity.Description;
+                activity.Category = request.Category ?? activity.Category;
+                activity.Date = request.Date ?? activity.Date;
+                activity.City = request.City ?? activity.City;
+                activity.Venue = request.Venue ?? activity.Venue;
 
-                    if(success)
-                    {
-                        return Unit.Value;
-                    }
-                    else
-                    {
-                        throw new Exception("Problem Saving Changes");
-                    }
-                }
+                var success = await _context.SaveChangesAsync() > 0;
+
+                if (success) return Unit.Value;
+
+                throw new Exception("Problem saving changes");
             }
         }
     }

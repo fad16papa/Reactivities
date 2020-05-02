@@ -55,17 +55,12 @@ namespace Application.Activities
                     Venue = request.Venue
                 };
 
-                _context.Activities.AddRange(activity);
-                var succcesss = await _context.SaveChangesAsync() > 0;
+                _context.Activities.Add(activity);
+                var success = await _context.SaveChangesAsync() > 0;
 
-                if(succcesss) 
-                {
-                    return Unit.Value;
-                }
-                else
-                {
-                    throw new Exception("Problem Saving Changes");
-                }
+                if (success) return Unit.Value;
+
+                throw new Exception("Problem saving changes");
             }
         }
     }

@@ -1,51 +1,44 @@
 import React, { useContext, useEffect } from 'react';
 import { Grid } from 'semantic-ui-react';
-import ActivityStore from '../../../app/stores/activityStore'
+import ActivityStore from '../../../app/stores/activityStore';
 import { observer } from 'mobx-react-lite';
-import { RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router';
 import LoadingComponent from '../../../app/layout/LoadingComponent';
 import ActivityDetailedHeader from './ActivityDetailedHeader';
 import ActivityDetailedInfo from './ActivityDetailedInfo';
 import ActivityDetailedChat from './ActivityDetailedChat';
 import ActivityDetailedSidebar from './ActivityDetailedSidebar';
 
-interface DetailsParams {
+interface DetailParams {
   id: string;
 }
 
-const ActivityDetails: React.FC<RouteComponentProps<DetailsParams>> = ({
+const ActivityDetails: React.FC<RouteComponentProps<DetailParams>> = ({
   match,
   history
 }) => {
   const activityStore = useContext(ActivityStore);
-  const {
-    activity: activity, 
-    loadActivity, 
-    loadingInitial
-  } = activityStore;
+  const { activity, loadActivity, loadingInitial } = activityStore;
 
-  //Call the loadActivity from activityStore
   useEffect(() => {
-    loadActivity(match.params.id)
-  }, [loadActivity, match.params.id, history]) 
+    loadActivity(match.params.id);
+  }, [loadActivity, match.params.id, history]);
 
-  if(loadingInitial) return <LoadingComponent content='Loading Activity...'/>
+  if (loadingInitial) return <LoadingComponent content='Loading activity...' />;
 
-  if(!activity)
-  return <h2>Activity Not Found</h2>
+  if (!activity) return <h2>Activity not found</h2>;
 
   return (
-   <Grid>
+    <Grid>
       <Grid.Column width={10}>
-        <ActivityDetailedHeader activity={activity}/>
-        <ActivityDetailedInfo activity={activity}/>
-        <ActivityDetailedChat/>
+        <ActivityDetailedHeader activity={activity} />
+        <ActivityDetailedInfo activity={activity} />
+        <ActivityDetailedChat />
       </Grid.Column>
-
       <Grid.Column width={6}>
-        <ActivityDetailedSidebar/>
+        <ActivityDetailedSidebar />
       </Grid.Column>
-   </Grid>
+    </Grid>
   );
 };
 
