@@ -21,36 +21,31 @@ namespace Application.Activities
         {
             private readonly DataContext _context;
             private readonly IUserAccessor _userAccessor;
-
             public Handler(DataContext context, IUserAccessor userAccessor)
             {
-                _context = context;
                 _userAccessor = userAccessor;
+                _context = context;
             }
 
             public async Task<Unit> Handle(Command request, CancellationToken cancellationToken)
             {
-                // handler logic         
-                 var acitivity = await _context.Activities.FindAsync(request.Id);
+                var activity = await _context.Activities.FindAsync(request.Id);
 
-                if(acitivity == null)
-                {
-                    throw new RestException(HttpStatusCode.NotFound, new {Activity = "Could not find Activity"});
-                }       
+                if (activity == null)
+                    throw new RestException(HttpStatusCode.NotFound, new {Activity = "Cound not find activity"});
 
-                var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == _userAccessor.GetCurrentUserName());
+                var user = await _context.Users.SingleOrDefaultAsync(x => 
+                    x.UserName == _userAccessor.GetCurrentUsername());
 
-                var attendance = await _context.UserActivities.SingleOrDefaultAsync(x => x.ActivityId == acitivity.Id && x.AppUserId == user.Id);
+                var attendance = await _context.UserActivities
+                    .SingleOrDefaultAsync(x => x.ActivityId == activity.Id && 
+                        x.AppUserId == user.Id); 
 
-                if(attendance == null)
-                {
-                    return Unit.Value;
-                }
+                if (attendance == null)
+                    return Unit.Value;   
 
-                if(attendance.IsHost)
-                {
-                    throw new RestException(HttpStatusCode.BadRequest, new {Attendance = "You cannot remove yourself as host."});
-                }
+                if (attendance.IsHost)
+                    throw new RestException(HttpStatusCode.BadRequest, new {Attendance = "You cannot remove yourself as host"});
 
                 _context.UserActivities.Remove(attendance);
 

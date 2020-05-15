@@ -5,12 +5,12 @@ namespace Application.Activities
 {
     public class MappingProfile : Profile
     {
-        public MappingProfile()
+      public MappingProfile()
         {
             CreateMap<Activity, ActivityDTO>();
             CreateMap<UserActivity, AttendeeDTO>()
-                .ForMember(d => d.Username, opt => opt.MapFrom(src => src.AppUser.UserName))
-                .ForMember(d => d.DisplayName, opt => opt.MapFrom(src => src.AppUser.DisplayName));
+                .ForMember(d => d.Username, o => o.MapFrom(s => s.AppUser.UserName))
+                .ForMember(d => d.DisplayName, o => o.MapFrom(s => s.AppUser.DisplayName));
         }
     }
 }
