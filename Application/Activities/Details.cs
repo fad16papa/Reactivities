@@ -13,12 +13,12 @@ namespace Application.Activities
 {
     public class Details
     {
-        public class Query : IRequest<ActivityDTO>
+        public class Query : IRequest<ActivityDto>
         {
             public Guid Id { get; set; }
         }
 
-        public class Handler : IRequestHandler<Query, ActivityDTO>
+        public class Handler : IRequestHandler<Query, ActivityDto>
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
@@ -28,14 +28,15 @@ namespace Application.Activities
                 _context = context;
             }
 
-            public async Task<ActivityDTO> Handle(Query request, CancellationToken cancellationToken)
+            public async Task<ActivityDto> Handle(Query request, CancellationToken cancellationToken)
             {
-                var activity = await _context.Activities.FindAsync(request.Id);
+                var activity = await _context.Activities
+                    .FindAsync(request.Id);
 
                 if (activity == null)
                     throw new RestException(HttpStatusCode.NotFound, new { Activity = "Not found" });
 
-                var activityToReturn = _mapper.Map<Activity, ActivityDTO>(activity);
+                var activityToReturn = _mapper.Map<Activity, ActivityDto>(activity);
 
                 return activityToReturn;
             }

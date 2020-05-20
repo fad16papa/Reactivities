@@ -10,7 +10,7 @@ export const combineDateAndTime = (date: Date, time: Date) => {
     const dateString = `${year}-${month}-${day}`;
 
     return new Date(dateString + ' ' + timeString);
-};
+}
 
 export const setActivityProps = (activity: IActivity, user: IUser) => {
     activity.date = new Date(activity.date);
@@ -19,13 +19,12 @@ export const setActivityProps = (activity: IActivity, user: IUser) => {
     )
     activity.isHost = activity.attendees.some(
       a => a.username === user.username && a.isHost
-    );
-
+    )
     return activity;
-};
+}
 
 export const createAttendee = (user: IUser): IAttendee => {
-    return  {
+    return {
         displayName: user.displayName,
         isHost: false,
         username: user.username,

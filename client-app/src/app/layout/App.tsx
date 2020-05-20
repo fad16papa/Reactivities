@@ -3,7 +3,12 @@ import { Container } from 'semantic-ui-react';
 import NavBar from '../../features/nav/NavBar';
 import ActivityDashboard from '../../features/activities/dashboard/ActivityDashboard';
 import { observer } from 'mobx-react-lite';
-import {Route,withRouter,RouteComponentProps,Switch} from 'react-router-dom';
+import {
+  Route,
+  withRouter,
+  RouteComponentProps,
+  Switch
+} from 'react-router-dom';
 import HomePage from '../../features/home/HomePage';
 import ActivityForm from '../../features/activities/form/ActivityForm';
 import ActivityDetails from '../../features/activities/details/ActivityDetails';
@@ -13,27 +18,26 @@ import LoginForm from '../../features/user/LoginForm';
 import { RootStoreContext } from '../stores/rootStore';
 import LoadingComponent from './LoadingComponent';
 import ModalContainer from '../common/modals/ModalContainer';
+import ProfilePage from '../../features/profiles/ProfilePage';
 
 const App: React.FC<RouteComponentProps> = ({ location }) => {
   const rootStore = useContext(RootStoreContext);
-  const { setAppLoaded, token, apploaded } = rootStore.commonStore;
-  const { getUser } = rootStore.userStore;
-  
+  const {setAppLoaded, token, appLoaded} = rootStore.commonStore;
+  const {getUser} = rootStore.userStore;
+
   useEffect(() => {
-    if(token) {
+    if (token) {
       getUser().finally(() => setAppLoaded())
     } else {
-      setAppLoaded()
+      setAppLoaded();
     }
   }, [getUser, setAppLoaded, token])
 
-  if(!apploaded) {
-    return <LoadingComponent content='Loading app....'/>
-  }
+  if (!appLoaded)  return <LoadingComponent content='Loading app...' />
 
   return (
     <Fragment>
-      <ModalContainer/>
+      <ModalContainer />
       <ToastContainer position='bottom-right' />
       <Route exact path='/' component={HomePage} />
       <Route
@@ -50,8 +54,8 @@ const App: React.FC<RouteComponentProps> = ({ location }) => {
                   path={['/createActivity', '/manage/:id']}
                   component={ActivityForm}
                 />
-                <Route path='/login' component={LoginForm} />
-                <Route component={NotFound}/>
+                <Route path='/profile/:username' component={ProfilePage}/>
+                <Route component={NotFound} />
               </Switch>
             </Container>
           </Fragment>

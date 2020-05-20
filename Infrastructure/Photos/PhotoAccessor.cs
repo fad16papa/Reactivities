@@ -15,7 +15,7 @@ namespace Infrastructure.Photos
         {
             var acc = new Account
             (
-                config.Value.CloudeName,
+                config.Value.CloudName,
                 config.Value.ApiKey,
                 config.Value.ApiSecret
             );
@@ -34,7 +34,6 @@ namespace Infrastructure.Photos
                     var uploadParams = new ImageUploadParams
                     {
                         File = new FileDescription(file.FileName, stream),
-                        //fomat the image file 
                         Transformation = new Transformation().Height(500).Width(500).Crop("fill").Gravity("face")
                     };
                     uploadResult = _cloudinary.Upload(uploadParams);

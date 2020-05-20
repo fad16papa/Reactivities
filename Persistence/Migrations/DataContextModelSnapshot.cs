@@ -14,7 +14,7 @@ namespace Persistence.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.2.6-servicing-10079");
+                .HasAnnotation("ProductVersion", "2.2.4-servicing-10062");
 
             modelBuilder.Entity("Domain.Activity", b =>
                 {
@@ -99,7 +99,7 @@ namespace Persistence.Migrations
 
                     b.Property<string>("AppUserId");
 
-                    b.Property<string>("IsMain");
+                    b.Property<bool>("IsMain");
 
                     b.Property<string>("Url");
 

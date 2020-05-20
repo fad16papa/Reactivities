@@ -5,10 +5,10 @@ import { IAttendee } from '../../../app/models/activity';
 import { observer } from 'mobx-react-lite';
 
 interface IProps {
-  attendees: IAttendee[]
+  attendees: IAttendee[];
 }
 
-const ActivityDetailedSidebar: React.FC<IProps> = ({attendees}) => {
+const ActivityDetailedSidebar: React.FC<IProps> = ({ attendees }) => {
   return (
     <Fragment>
       <Segment
@@ -19,12 +19,11 @@ const ActivityDetailedSidebar: React.FC<IProps> = ({attendees}) => {
         inverted
         color='teal'
       >
-      {attendees.length} {attendees.length === 1 ? 'Person' : 'People'} going
+        {attendees.length} {attendees.length === 1 ? 'Person' : 'People'} going
       </Segment>
       <Segment attached>
         <List relaxed divided>
-          
-        {attendees.map(attendee => (
+          {attendees.map(attendee => (
             <Item key={attendee.username} style={{ position: 'relative' }}>
               {attendee.isHost && (
                 <Label
@@ -46,7 +45,6 @@ const ActivityDetailedSidebar: React.FC<IProps> = ({attendees}) => {
               </Item.Content>
             </Item>
           ))}
-          
         </List>
       </Segment>
     </Fragment>

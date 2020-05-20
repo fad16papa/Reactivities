@@ -1,31 +1,31 @@
-import { RootStore } from "./rootStore";
-import { observable, action, reaction } from "mobx";
+import {RootStore} from './rootStore';
+import { observable, action, reaction } from 'mobx';
 
 export default class CommonStore {
     rootStore: RootStore;
     constructor(rootStore: RootStore) {
-        this.rootStore = rootStore
+        this.rootStore = rootStore;
 
-        reaction (
+        reaction(
             () => this.token,
             token => {
-                if(token) {
+                if (token) {
                     window.localStorage.setItem('jwt', token);
                 } else {
-                    window.localStorage.removeItem('jwt');
+                    window.localStorage.removeItem('jwt')
                 }
             }
         )
     }
 
     @observable token: string | null = window.localStorage.getItem('jwt');
-    @observable apploaded = false;
+    @observable appLoaded = false;
 
     @action setToken = (token: string | null) => {
         this.token = token;
     }
 
     @action setAppLoaded = () => {
-        this.apploaded = true;
+        this.appLoaded = true;
     }
 }

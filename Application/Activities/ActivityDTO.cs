@@ -4,7 +4,7 @@ using Newtonsoft.Json;
 
 namespace Application.Activities
 {
-    public class ActivityDTO
+    public class ActivityDto
     {
         public Guid Id { get; set; }
         public string Title { get; set; }
@@ -15,6 +15,6 @@ namespace Application.Activities
         public string Venue { get; set; }
 
         [JsonProperty("attendees")]
-        public ICollection<AttendeeDTO> UserActivities { get; set; }
+        public ICollection<AttendeeDto> UserActivities { get; set; }
     }
 }

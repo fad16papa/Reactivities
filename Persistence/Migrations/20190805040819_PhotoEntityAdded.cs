@@ -17,7 +17,7 @@ namespace Persistence.Migrations
                 {
                     Id = table.Column<string>(nullable: false),
                     Url = table.Column<string>(nullable: true),
-                    IsMain = table.Column<string>(nullable: true),
+                    IsMain = table.Column<bool>(nullable: false),
                     AppUserId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>

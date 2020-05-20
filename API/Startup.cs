@@ -2,7 +2,6 @@
 using API.Middleware;
 using Application.Activities;
 using Application.Interfaces;
-using Application.User;
 using AutoMapper;
 using Domain;
 using FluentValidation.AspNetCore;
@@ -19,7 +18,6 @@ using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Persistence;
 
@@ -93,10 +91,10 @@ namespace API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseMiddleware<ErrorHandlingMiddleware>();
-            
+
             if (env.IsDevelopment())
             {
                 // app.UseDeveloperExceptionPage();
@@ -108,16 +106,9 @@ namespace API
             }
 
             // app.UseHttpsRedirection();
-            app.UseRouting(); 
-            app.UseCors("CorsPolicy");
-
             app.UseAuthentication();
-            app.UseAuthorization();
-
-            //app.UseMvc();
-            app.UseEndpoints(endpoints => {
-                endpoints.MapControllers();
-            });
+            app.UseCors("CorsPolicy");
+            app.UseMvc();
         }
     }
 }

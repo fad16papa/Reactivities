@@ -8,6 +8,7 @@ using Domain;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
+using Persistence;
 
 namespace Application.User
 {
@@ -45,15 +46,14 @@ namespace Application.User
                 var user = await _userManager.FindByEmailAsync(request.Email);
 
                 if (user == null)
-                {
                     throw new RestException(HttpStatusCode.Unauthorized);
-                }
 
-                var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, false);
+                var result = await _signInManager
+                    .CheckPasswordSignInAsync(user, request.Password, false);
 
                 if (result.Succeeded)
                 {
-                    //TODO: Genereate a token
+                    // TODO: generate token
                     return new User
                     {
                         DisplayName = user.DisplayName,
@@ -62,11 +62,8 @@ namespace Application.User
                         Image = user.Photos.FirstOrDefault(x => x.IsMain)?.Url
                     };
                 }
-                else
-                {
-                    throw new RestException(HttpStatusCode.Unauthorized);
-                }
 
+                throw new RestException(HttpStatusCode.Unauthorized);
             }
         }
     }
