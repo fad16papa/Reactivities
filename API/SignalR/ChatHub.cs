@@ -10,7 +10,6 @@ namespace API.SignalR
     public class ChatHub : Hub
     {
         private readonly IMediator _mediator;
-
         public ChatHub(IMediator mediator)
         {
             _mediator = mediator;
@@ -26,6 +25,7 @@ namespace API.SignalR
 
             await Clients.Group(command.ActivityId.ToString()).SendAsync("ReceiveComment", comment);
         }
+
         private string GetUsername()
         {
             return Context.User?.Claims?.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier)?.Value;

@@ -17,7 +17,7 @@ namespace API.Controllers
         }
 
         [HttpDelete("{username}/follow")]
-        public async Task<ActionResult<Unit>> UnFollow(string username)
+        public async Task<ActionResult<Unit>> Unfollow(string username)
         {
             return await Mediator.Send(new Delete.Command{Username = username});
         }
@@ -25,7 +25,7 @@ namespace API.Controllers
         [HttpGet("{username}/follow")]
         public async Task<ActionResult<List<Profile>>> GetFollowings(string username, string predicate)
         {
-            return await Mediator.Send(new List.Query{UserName = username, Predicate = predicate}); 
+            return await Mediator.Send(new List.Query{Username = username, Predicate = predicate});
         }
     }
 }

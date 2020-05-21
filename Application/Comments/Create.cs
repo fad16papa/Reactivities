@@ -24,22 +24,18 @@ namespace Application.Comments
         {
             private readonly DataContext _context;
             private readonly IMapper _mapper;
-
             public Handler(DataContext context, IMapper mapper)
             {
-                _context = context;
                 _mapper = mapper;
+                _context = context;
             }
 
             public async Task<CommentDto> Handle(Command request, CancellationToken cancellationToken)
             {
-                // handler logic            
                 var activity = await _context.Activities.FindAsync(request.ActivityId);
 
-                if(activity.Id == null)
-                {
+                if (activity == null)
                     throw new RestException(HttpStatusCode.NotFound, new {Activity = "Not found"});
-                }    
 
                 var user = await _context.Users.SingleOrDefaultAsync(x => x.UserName == request.Username);
 

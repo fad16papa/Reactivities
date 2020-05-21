@@ -17,7 +17,6 @@ namespace Application.Profiles
         public class Handler : IRequestHandler<Query, Profile>
         {
             private readonly IProfileReader _profileReader;
-
             public Handler(IProfileReader profileReader)
             {
                 _profileReader = profileReader;

@@ -51,24 +51,23 @@ namespace Application.Activities
             public async Task<ActivitiesEnvelope> Handle(Query request, CancellationToken cancellationToken)
             {
                 var queryable = _context.Activities
-                .Where(x => x.Date >= request.StartDate)
-                .OrderBy(x => x.Date)
-                .AsQueryable();
+                    .Where(x => x.Date >= request.StartDate)
+                    .OrderBy(x => x.Date)
+                    .AsQueryable();
 
-                //this will return all the activities of the current user 
                 if (request.IsGoing && !request.IsHost)
                 {
                     queryable = queryable.Where(x => x.UserActivities.Any(a => a.AppUser.UserName == _userAccessor.GetCurrentUsername()));
                 }
 
-                if(request.IsHost && !request.IsGoing)
+                if (request.IsHost && !request.IsGoing)
                 {
                     queryable = queryable.Where(x => x.UserActivities.Any(a => a.AppUser.UserName == _userAccessor.GetCurrentUsername() && a.IsHost));
                 }
 
                 var activities = await queryable
-                .Skip(request.Offset ?? 0)
-                .Take(request.Limit ?? 3).ToListAsync();
+                    .Skip(request.Offset ?? 0)
+                    .Take(request.Limit ?? 3).ToListAsync();
 
                 return new ActivitiesEnvelope
                 {

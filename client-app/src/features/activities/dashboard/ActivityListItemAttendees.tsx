@@ -8,7 +8,7 @@ interface IProps {
 
 const styles = {
   borderColor: 'orange',
-  borderWidth: 2 
+  borderWidth: 2
 }
 
 const ActivityListItemAttendees: React.FC<IProps> = ({ attendees }) => {
@@ -24,7 +24,7 @@ const ActivityListItemAttendees: React.FC<IProps> = ({ attendees }) => {
                 circular
                 src={attendee.image || '/assets/user.png'}
                 bordered
-                styles={attendee.following ? styles : null}
+                style={attendee.following ? styles : null}
               />
             }
           />

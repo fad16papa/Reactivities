@@ -14,7 +14,7 @@ namespace Application.Followers
     {
         public class Query : IRequest<List<Profile>> 
         { 
-            public string UserName { get; set; }
+            public string Username { get; set; }
             public string Predicate { get; set; }
         }
 
@@ -30,7 +30,6 @@ namespace Application.Followers
 
             public async Task<List<Profile>> Handle(Query request, CancellationToken cancellationToken)
             {
-                // handler logic goes here
                 var queryable = _context.Followings.AsQueryable();
 
                 var userFollowings = new List<UserFollowing>();
@@ -40,20 +39,21 @@ namespace Application.Followers
                 {
                     case "followers":
                     {
-                        userFollowings = await queryable.Where(x => x.Target.UserName == request.UserName).ToListAsync();
+                        userFollowings = await queryable.Where(x => 
+                            x.Target.UserName == request.Username).ToListAsync();
 
-                        foreach (var follower in userFollowings)
+                        foreach(var follower in userFollowings)
                         {
                             profiles.Add(await _profileReader.ReadProfile(follower.Observer.UserName));
                         }
                         break;
                     }
-
                     case "following":
                     {
-                        userFollowings = await queryable.Where(x => x.Observer.UserName == request.UserName).ToListAsync();
+                        userFollowings = await queryable.Where(x => 
+                            x.Observer.UserName == request.Username).ToListAsync();
 
-                        foreach (var follower in userFollowings)
+                        foreach(var follower in userFollowings)
                         {
                             profiles.Add(await _profileReader.ReadProfile(follower.Target.UserName));
                         }
