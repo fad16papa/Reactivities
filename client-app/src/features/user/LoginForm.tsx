@@ -1,18 +1,18 @@
-import React, { useContext } from 'react';
-import { Form as FinalForm, Field } from 'react-final-form';
-import { Form, Button, Header, Divider } from 'semantic-ui-react';
-import TextInput from '../../app/common/form/TextInput';
-import { RootStoreContext } from '../../app/stores/rootStore';
-import { IUserFormValues } from '../../app/models/user';
-import { FORM_ERROR } from 'final-form';
-import { combineValidators, isRequired } from 'revalidate';
-import ErrorMessage from '../../app/common/form/ErrorMessage';
-import SocialLogin from './SocialLogin';
-import { observer } from 'mobx-react-lite';
+import React, { useContext } from "react";
+import { Form as FinalForm, Field } from "react-final-form";
+import { Form, Button, Header, Divider } from "semantic-ui-react";
+import TextInput from "../../app/common/form/TextInput";
+import { RootStoreContext } from "../../app/stores/rootStore";
+import { IUserFormValues } from "../../app/models/user";
+import { FORM_ERROR } from "final-form";
+import { combineValidators, isRequired } from "revalidate";
+import ErrorMessage from "../../app/common/form/ErrorMessage";
+import SocialLogin from "./SocialLogin";
+import { observer } from "mobx-react-lite";
 
 const validate = combineValidators({
-  email: isRequired('Email'),
-  password: isRequired('Password')
+  email: isRequired("Email"),
+  password: isRequired("Password"),
 });
 
 const LoginForm = () => {
@@ -21,8 +21,8 @@ const LoginForm = () => {
   return (
     <FinalForm
       onSubmit={(values: IUserFormValues) =>
-        login(values).catch(error => ({
-          [FORM_ERROR]: error
+        login(values).catch((error) => ({
+          [FORM_ERROR]: error,
         }))
       }
       validate={validate}
@@ -32,33 +32,33 @@ const LoginForm = () => {
         submitError,
         invalid,
         pristine,
-        dirtySinceLastSubmit
+        dirtySinceLastSubmit,
       }) => (
         <Form onSubmit={handleSubmit} error>
           <Header
-            as='h2'
-            content='Login to Reactivities'
-            color='teal'
-            textAlign='center'
+            as="h2"
+            content="Login to Yuguo"
+            color="teal"
+            textAlign="center"
           />
-          <Field name='email' component={TextInput} placeholder='Email' />
+          <Field name="email" component={TextInput} placeholder="Email" />
           <Field
-            name='password'
+            name="password"
             component={TextInput}
-            placeholder='Password'
-            type='password'
+            placeholder="Password"
+            type="password"
           />
           {submitError && !dirtySinceLastSubmit && (
             <ErrorMessage
               error={submitError}
-              text='Invalid email or password'
+              text="Invalid email or password"
             />
           )}
           <Button
             disabled={(invalid && !dirtySinceLastSubmit) || pristine}
             loading={submitting}
-            color='teal'
-            content='Login'
+            color="teal"
+            content="Login"
             fluid
           />
           <Divider horizontal>Or</Divider>

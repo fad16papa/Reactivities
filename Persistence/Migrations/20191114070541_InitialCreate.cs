@@ -12,9 +12,11 @@ namespace Persistence.Migrations
                 columns: table => new
                 {
                     Id = table.Column<int>(nullable: false)
-                        .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn)
-                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn)
-                        .Annotation("Sqlite:Autoincrement", true),
+                    .Annotation("MySql:ValueGenerationStrategy",
+                    MySqlValueGenerationStrategy.IdentityColumn) //this is for databse migration for MySql
+                    .Annotation("SqlServer:ValueGenerationStrategy",
+                    SqlServerValueGenerationStrategy.IdentityColumn)//this is for database migration for SqlServer
+                        .Annotation("Sqlite:Autoincrement", true),//this is for databse migration for SqlLite
                     Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>

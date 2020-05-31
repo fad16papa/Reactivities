@@ -59,17 +59,17 @@ namespace API
 
             ConfigureServices(services);
         }
-        
+
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<DataContext>(opt => 
+            services.AddDbContext<DataContext>(opt =>
             {
                 opt.UseLazyLoadingProxies();
                 opt.UseSqlite(Configuration.GetConnectionString("DefaultConnection"));
             });
-            services.AddCors(opt => 
+            services.AddCors(opt =>
             {
-                opt.AddPolicy("CorsPolicy", policy => 
+                opt.AddPolicy("CorsPolicy", policy =>
                 {
                     policy
                     .AllowAnyHeader()
@@ -86,7 +86,7 @@ namespace API
                 var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
                 opt.Filters.Add(new AuthorizeFilter(policy));
             })
-                .AddFluentValidation(cfg => 
+                .AddFluentValidation(cfg =>
                 {
                     cfg.RegisterValidatorsFromAssemblyContaining<Create>();
                 });
@@ -107,7 +107,7 @@ namespace API
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["TokenKey"]));
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(opt => 
+                .AddJwtBearer(opt =>
                 {
                     opt.TokenValidationParameters = new TokenValidationParameters
                     {
@@ -116,7 +116,7 @@ namespace API
                         ValidateAudience = false,
                         ValidateIssuer = false,
                         ValidateLifetime = true,
-                        ClockSkew = TimeSpan.Zero               
+                        ClockSkew = TimeSpan.Zero
                     };
                     opt.Events = new JwtBearerEvents
                     {
@@ -153,20 +153,20 @@ namespace API
 
             // app.UseHttpsRedirection();
 
-            app.UseXContentTypeOptions();
-            app.UseReferrerPolicy(opt => opt.NoReferrer());
-            app.UseXXssProtection(opt => opt.EnabledWithBlockMode());
-            app.UseXfo(opt => opt.Deny());
-            app.UseCsp(opt => opt
-                    .BlockAllMixedContent()
-                    .StyleSources(s => s.Self()
-                        .CustomSources("https://fonts.googleapis.com", "sha256-F4GpCPyRepgP5znjMD8sc7PEjzet5Eef4r09dEGPpTs="))
-                    .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com", "data:"))
-                    .FormActions(s => s.Self())
-                    .FrameAncestors(s => s.Self())
-                    .ImageSources(s => s.Self().CustomSources("https://res.cloudinary.com", "blob:", "data:"))
-                    .ScriptSources(s => s.Self().CustomSources("sha256-zTmokOtDNMlBIULqs//ZgFtzokerG72Q30ccMjdGbSA="))
-                );
+            // app.UseXContentTypeOptions();
+            // app.UseReferrerPolicy(opt => opt.NoReferrer());
+            // app.UseXXssProtection(opt => opt.EnabledWithBlockMode());
+            // app.UseXfo(opt => opt.Deny());
+            // app.UseCsp(opt => opt
+            //         .BlockAllMixedContent()
+            //         .StyleSources(s => s.Self()
+            //             .CustomSources("https://fonts.googleapis.com", "sha256-F4GpCPyRepgP5znjMD8sc7PEjzet5Eef4r09dEGPpTs="))
+            //         .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com", "data:"))
+            //         .FormActions(s => s.Self())
+            //         .FrameAncestors(s => s.Self())
+            //         .ImageSources(s => s.Self().CustomSources("https://res.cloudinary.com", "blob:", "data:"))
+            //         .ScriptSources(s => s.Self().CustomSources("sha256-5As4+3YpY62+l38PsxCEkjB1R4YtyktBtRScTJ3fyLU="))
+            //     );
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
