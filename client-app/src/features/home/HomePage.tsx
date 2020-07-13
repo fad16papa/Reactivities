@@ -35,7 +35,11 @@ const HomePage = () => {
           </Fragment>
         ) : (
           <Fragment>
-            <Header as="h2" inverted content={`Welcome to Reactivitities`} />
+            <Header
+              as="h2"
+              inverted
+              content={`Welcome to your online scheduler`}
+            />
             <Button
               onClick={() => openModal(<LoginForm />)}
               size="huge"

@@ -153,20 +153,20 @@ namespace API
 
             // app.UseHttpsRedirection();
 
-            // app.UseXContentTypeOptions();
-            // app.UseReferrerPolicy(opt => opt.NoReferrer());
-            // app.UseXXssProtection(opt => opt.EnabledWithBlockMode());
-            // app.UseXfo(opt => opt.Deny());
-            // app.UseCsp(opt => opt
-            //         .BlockAllMixedContent()
-            //         .StyleSources(s => s.Self()
-            //             .CustomSources("https://fonts.googleapis.com", "sha256-F4GpCPyRepgP5znjMD8sc7PEjzet5Eef4r09dEGPpTs="))
-            //         .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com", "data:"))
-            //         .FormActions(s => s.Self())
-            //         .FrameAncestors(s => s.Self())
-            //         .ImageSources(s => s.Self().CustomSources("https://res.cloudinary.com", "blob:", "data:"))
-            //         .ScriptSources(s => s.Self().CustomSources("sha256-5As4+3YpY62+l38PsxCEkjB1R4YtyktBtRScTJ3fyLU="))
-            //     );
+            app.UseXContentTypeOptions();
+            app.UseReferrerPolicy(opt => opt.NoReferrer());
+            app.UseXXssProtection(opt => opt.EnabledWithBlockMode());
+            app.UseXfo(opt => opt.Deny());
+            app.UseCsp(opt => opt
+                    .BlockAllMixedContent()
+                    .StyleSources(s => s.Self()
+                        .CustomSources("https://fonts.googleapis.com", "sha256-F4GpCPyRepgP5znjMD8sc7PEjzet5Eef4r09dEGPpTs="))
+                    .FontSources(s => s.Self().CustomSources("https://fonts.gstatic.com", "data:"))
+                    .FormActions(s => s.Self())
+                    .FrameAncestors(s => s.Self())
+                    .ImageSources(s => s.Self().CustomSources("https://res.cloudinary.com", "blob:", "data:"))
+                    .ScriptSources(s => s.Self().CustomSources("sha256-5As4+3YpY62+l38PsxCEkjB1R4YtyktBtRScTJ3fyLU="))
+                );
 
             app.UseDefaultFiles();
             app.UseStaticFiles();
